@@ -3,7 +3,9 @@
 **An AI analyst that answers supply chain questions like a consultant: it builds an issue tree, tests every branch with data, sizes the real drivers and recommends prioritised actions, and it never invents a number.**
 
 <!-- TODO: replace both links once the app is deployed and the video is uploaded -->
-**[▶ Try it live](https://YOUR-APP-NAME.streamlit.app)** &nbsp;·&nbsp; **[🎬 Watch the demo](https://YOUR-VIDEO-LINK)**
+ &nbsp;·&nbsp; **[🎬 Watch the demo](**docs/screenshot.png**
+
+)**
 
 <!-- TODO: add a screenshot of the results page as docs/screenshot.png -->
 ![Screenshot of the app: executive summary, issue tree and reasoning trail](docs/screenshot.png)
