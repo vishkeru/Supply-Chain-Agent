@@ -50,6 +50,11 @@ METRICS = {
         "how": "mean",
         "definition": "Share of order lines delivered late (0 to 1). Cancelled lines count as not late.",
     },
+    "loss_rate": {
+        "column": "is_loss",
+        "how": "mean",
+        "definition": "Share of order lines that lose money (profit below zero), 0 to 1.",
+    },
     "avg_delay": {
         "column": "delay_days",
         "how": "mean",
@@ -66,6 +71,9 @@ METRICS = {
         "definition": "Total profit in dollars (recorded per order line despite the column name).",
     },
 }
+
+# Metrics that are shares from 0 to 1, shown as percentages
+RATE_METRICS = ["late_rate", "loss_rate"]
 
 # Friendly names for time periods -> pandas period codes
 FREQUENCIES = {"month": "M", "quarter": "Q"}
@@ -86,6 +94,8 @@ def prepare_data(df):
     df = df.copy()
     df["order_date"] = pd.to_datetime(df["order date (DateOrders)"], format="%m/%d/%Y %H:%M")
     df["delay_days"] = df["Days for shipping (real)"] - df["Days for shipment (scheduled)"]
+    # 1 if the order line lost money, else 0 (its average is the loss_rate)
+    df["is_loss"] = (df["Order Profit Per Order"] < 0).astype(int)
     return df
 
 
@@ -173,7 +183,7 @@ def to_number(value):
 
 def format_value(metric, value):
     """Human-readable version of a metric value, used in descriptions."""
-    if metric == "late_rate":
+    if metric in RATE_METRICS:
         return f"{value:.1%}"
     if metric == "avg_delay":
         return f"{value:+.2f} days"
@@ -261,15 +271,20 @@ def trend_over_time(metric, freq="month", df=None):
 
     # Flag periods with far fewer order lines than usual: they may be incomplete data
     low_volume_cutoff = grouped["rows"].median() / 2
+    baseline = metric_value(df, metric)
 
     periods = []
     for name, row in grouped.iterrows():
-        periods.append({
+        entry = {
             "period": str(name),
             "value": to_number(row["value"]),
             "rows": int(row["rows"]),
             "low_volume": bool(row["rows"] < low_volume_cutoff),
-        })
+        }
+        if spec["how"] == "mean":
+            # Same comparison as segment_analysis: this period vs the overall average
+            entry["gap_vs_baseline"] = to_number(row["value"] - baseline)
+        periods.append(entry)
 
     first, last = periods[0], periods[-1]
     n_low = sum(p["low_volume"] for p in periods)
@@ -286,6 +301,7 @@ def trend_over_time(metric, freq="month", df=None):
         "metric": metric,
         "metric_definition": spec["definition"],
         "freq": freq,
+        "baseline": to_number(baseline),
         "periods": periods,
         "description": description,
     }
@@ -359,11 +375,11 @@ def drill_down(filters, group_by, metric="late_rate", df=None):
     }
 
 
-@returns_error_dict
-def make_chart(data, chart_type, title, output_dir=None):
+def build_chart(data, chart_type, title):
     """
-    Save a chart of another tool's output as an HTML file and return its path.
+    Build (but don't save) a Plotly figure of another tool's output.
     `data` must be the result of segment_analysis, drill_down or trend_over_time.
+    Raises ToolInputError on bad input. Used by make_chart and by the Streamlit app.
     """
     check_choice(chart_type, CHART_TYPES, "chart_type")
     if not isinstance(title, str) or not title.strip():
@@ -408,10 +424,17 @@ def make_chart(data, chart_type, title, output_dir=None):
         fig.update_traces(marker_color=BLUE)
         value_axis = "y"
 
-    if metric == "late_rate":
+    if metric in RATE_METRICS:
         # Show rates as percentages on the value axis (xaxis or yaxis)
         fig.update_layout(**{f"{value_axis}axis_tickformat": ".0%"})
     fig.update_layout(template="plotly_white", title_x=0, showlegend=False)
+    return fig
+
+
+@returns_error_dict
+def make_chart(data, chart_type, title, output_dir=None):
+    """Save a chart of another tool's output as an HTML file and return its path."""
+    fig = build_chart(data, chart_type, title)
 
     # File name: slug of the title + timestamp, e.g. late-rate-by-mode_20260926_142501_123456.html
     slug = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")[:60] or "chart"
