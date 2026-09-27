@@ -1,0 +1,17 @@
+# Only the agent code in src/ is tracked and published.
+# Everything else (notebooks, tests, CLAUDE.md, data, .env, venv, ...) stays on this computer.
+/*
+!/.gitignore
+!/src/
+
+# Never publish secrets (already covered by /* above, listed to be explicit)
+.env
+
+# Python cache inside src/
+__pycache__/
+*.pyc
+.env
+venv/
+.venv/
+data/*.csv
+__pycache__/
