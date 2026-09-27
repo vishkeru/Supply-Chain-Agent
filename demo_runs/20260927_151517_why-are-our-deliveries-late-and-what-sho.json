@@ -1,0 +1,1043 @@
+{
+  "question": "Why are our deliveries late, and what should we do about it?",
+  "brain": "Scripted (no LLM)",
+  "timestamp": "2026-09-27 15:15",
+  "seconds": 9,
+  "events": [
+    {
+      "type": "run_start",
+      "question": "Why are our deliveries late, and what should we do about it?",
+      "brain": "scripted"
+    },
+    {
+      "type": "note",
+      "text": "Question type: late deliveries. I'll test every branch on the late-delivery rate."
+    },
+    {
+      "type": "issue_tree",
+      "root": "What is driving late deliveries, and what should we do about it?",
+      "branches": [
+        {
+          "name": "Logistics: Shipping Mode",
+          "hypothesis": "Some shipping modes miss their promised lead time far more often.",
+          "status": "untested",
+          "evidence": ""
+        },
+        {
+          "name": "Geography: Market",
+          "hypothesis": "Deliveries are late in particular regions.",
+          "status": "untested",
+          "evidence": ""
+        },
+        {
+          "name": "Customer: Customer Segment",
+          "hypothesis": "Some customer types get worse service.",
+          "status": "untested",
+          "evidence": ""
+        },
+        {
+          "name": "Product: Category",
+          "hypothesis": "Certain products are harder to deliver on time.",
+          "status": "untested",
+          "evidence": ""
+        },
+        {
+          "name": "Time: quarterly trend",
+          "hypothesis": "Lateness has got worse recently.",
+          "status": "untested",
+          "evidence": ""
+        }
+      ]
+    },
+    {
+      "type": "tool_call",
+      "call_id": "c1",
+      "tool": "segment_analysis",
+      "inputs": {
+        "metric": "late_rate",
+        "group_by": "Shipping Mode"
+      }
+    },
+    {
+      "type": "tool_result",
+      "call_id": "c1",
+      "tool": "segment_analysis",
+      "result": {
+        "result_id": "R1",
+        "metric": "late_rate",
+        "metric_definition": "Share of order lines delivered late (0 to 1). Cancelled lines count as not late.",
+        "group_by": "Shipping Mode",
+        "rows_analysed": 180519,
+        "baseline": 0.5483,
+        "groups": [
+          {
+            "group": "First Class",
+            "value": 0.9532,
+            "rows": 27814,
+            "gap_vs_baseline": 0.4049,
+            "small_sample": false
+          },
+          {
+            "group": "Second Class",
+            "value": 0.7663,
+            "rows": 35216,
+            "gap_vs_baseline": 0.218,
+            "small_sample": false
+          },
+          {
+            "group": "Same Day",
+            "value": 0.4574,
+            "rows": 9737,
+            "gap_vs_baseline": -0.0909,
+            "small_sample": false
+          },
+          {
+            "group": "Standard Class",
+            "value": 0.3807,
+            "rows": 107752,
+            "gap_vs_baseline": -0.1676,
+            "small_sample": false
+          }
+        ],
+        "description": "late_rate by Shipping Mode across 180,519 order lines, highest first. Overall: 54.8%. Highest: First Class (95.3%); lowest: Standard Class (38.1%)."
+      },
+      "is_error": false
+    },
+    {
+      "type": "note",
+      "text": "Logistics: Shipping Mode: driver. First Class at 95.3% vs 54.8% overall (+40.5 pp)."
+    },
+    {
+      "type": "tool_call",
+      "call_id": "c2",
+      "tool": "segment_analysis",
+      "inputs": {
+        "metric": "late_rate",
+        "group_by": "Market"
+      }
+    },
+    {
+      "type": "tool_result",
+      "call_id": "c2",
+      "tool": "segment_analysis",
+      "result": {
+        "result_id": "R2",
+        "metric": "late_rate",
+        "metric_definition": "Share of order lines delivered late (0 to 1). Cancelled lines count as not late.",
+        "group_by": "Market",
+        "rows_analysed": 180519,
+        "baseline": 0.5483,
+        "groups": [
+          {
+            "group": "Europe",
+            "value": 0.5521,
+            "rows": 50252,
+            "gap_vs_baseline": 0.0038,
+            "small_sample": false
+          },
+          {
+            "group": "Pacific Asia",
+            "value": 0.5505,
+            "rows": 41260,
+            "gap_vs_baseline": 0.0022,
+            "small_sample": false
+          },
+          {
+            "group": "USCA",
+            "value": 0.548,
+            "rows": 25799,
+            "gap_vs_baseline": -0.0003,
+            "small_sample": false
+          },
+          {
+            "group": "Africa",
+            "value": 0.5459,
+            "rows": 11614,
+            "gap_vs_baseline": -0.0024,
+            "small_sample": false
+          },
+          {
+            "group": "LATAM",
+            "value": 0.5436,
+            "rows": 51594,
+            "gap_vs_baseline": -0.0047,
+            "small_sample": false
+          }
+        ],
+        "description": "late_rate by Market across 180,519 order lines, highest first. Overall: 54.8%. Highest: Europe (55.2%); lowest: LATAM (54.4%)."
+      },
+      "is_error": false
+    },
+    {
+      "type": "note",
+      "text": "Geography: Market: ruled out. Every reliable segment is within 5 pp of 54.8%; worst is Europe at 55.2% (+0.4 pp)."
+    },
+    {
+      "type": "tool_call",
+      "call_id": "c3",
+      "tool": "segment_analysis",
+      "inputs": {
+        "metric": "late_rate",
+        "group_by": "Customer Segment"
+      }
+    },
+    {
+      "type": "tool_result",
+      "call_id": "c3",
+      "tool": "segment_analysis",
+      "result": {
+        "result_id": "R3",
+        "metric": "late_rate",
+        "metric_definition": "Share of order lines delivered late (0 to 1). Cancelled lines count as not late.",
+        "group_by": "Customer Segment",
+        "rows_analysed": 180519,
+        "baseline": 0.5483,
+        "groups": [
+          {
+            "group": "Home Office",
+            "value": 0.5507,
+            "rows": 32226,
+            "gap_vs_baseline": 0.0024,
+            "small_sample": false
+          },
+          {
+            "group": "Consumer",
+            "value": 0.5481,
+            "rows": 93504,
+            "gap_vs_baseline": -0.0002,
+            "small_sample": false
+          },
+          {
+            "group": "Corporate",
+            "value": 0.5472,
+            "rows": 54789,
+            "gap_vs_baseline": -0.0011,
+            "small_sample": false
+          }
+        ],
+        "description": "late_rate by Customer Segment across 180,519 order lines, highest first. Overall: 54.8%. Highest: Home Office (55.1%); lowest: Corporate (54.7%)."
+      },
+      "is_error": false
+    },
+    {
+      "type": "note",
+      "text": "Customer: Customer Segment: ruled out. Every reliable segment is within 5 pp of 54.8%; worst is Home Office at 55.1% (+0.2 pp)."
+    },
+    {
+      "type": "tool_call",
+      "call_id": "c4",
+      "tool": "segment_analysis",
+      "inputs": {
+        "metric": "late_rate",
+        "group_by": "Category Name"
+      }
+    },
+    {
+      "type": "tool_result",
+      "call_id": "c4",
+      "tool": "segment_analysis",
+      "result": {
+        "result_id": "R4",
+        "metric": "late_rate",
+        "metric_definition": "Share of order lines delivered late (0 to 1). Cancelled lines count as not late.",
+        "group_by": "Category Name",
+        "rows_analysed": 180519,
+        "baseline": 0.5483,
+        "groups": [
+          {
+            "group": "Golf Bags & Carts",
+            "value": 0.6885,
+            "rows": 61,
+            "gap_vs_baseline": 0.1402,
+            "small_sample": true
+          },
+          {
+            "group": "Lacrosse",
+            "value": 0.6006,
+            "rows": 343,
+            "gap_vs_baseline": 0.0523,
+            "small_sample": false
+          },
+          {
+            "group": "Pet Supplies",
+            "value": 0.5894,
+            "rows": 492,
+            "gap_vs_baseline": 0.0411,
+            "small_sample": false
+          },
+          {
+            "group": "Cameras ",
+            "value": 0.5811,
+            "rows": 592,
+            "gap_vs_baseline": 0.0328,
+            "small_sample": false
+          },
+          {
+            "group": "Strength Training",
+            "value": 0.5766,
+            "rows": 111,
+            "gap_vs_baseline": 0.0283,
+            "small_sample": false
+          },
+          {
+            "group": "As Seen on  TV!",
+            "value": 0.5735,
+            "rows": 68,
+            "gap_vs_baseline": 0.0252,
+            "small_sample": true
+          },
+          {
+            "group": "Music",
+            "value": 0.5714,
+            "rows": 434,
+            "gap_vs_baseline": 0.0231,
+            "small_sample": false
+          },
+          {
+            "group": "Accessories",
+            "value": 0.5697,
+            "rows": 1780,
+            "gap_vs_baseline": 0.0214,
+            "small_sample": false
+          },
+          {
+            "group": "Fitness Accessories",
+            "value": 0.5696,
+            "rows": 309,
+            "gap_vs_baseline": 0.0213,
+            "small_sample": false
+          },
+          {
+            "group": "Books ",
+            "value": 0.5654,
+            "rows": 405,
+            "gap_vs_baseline": 0.0171,
+            "small_sample": false
+          },
+          {
+            "group": "Women's Clothing",
+            "value": 0.5646,
+            "rows": 650,
+            "gap_vs_baseline": 0.0163,
+            "small_sample": false
+          },
+          {
+            "group": "Boxing & MMA",
+            "value": 0.5626,
+            "rows": 423,
+            "gap_vs_baseline": 0.0144,
+            "small_sample": false
+          },
+          {
+            "group": "Golf Gloves",
+            "value": 0.5626,
+            "rows": 1070,
+            "gap_vs_baseline": 0.0143,
+            "small_sample": false
+          },
+          {
+            "group": "Hunting & Shooting",
+            "value": 0.5614,
+            "rows": 440,
+            "gap_vs_baseline": 0.0131,
+            "small_sample": false
+          },
+          {
+            "group": "Electronics",
+            "value": 0.5608,
+            "rows": 3156,
+            "gap_vs_baseline": 0.0125,
+            "small_sample": false
+          },
+          {
+            "group": "Crafts",
+            "value": 0.5599,
+            "rows": 484,
+            "gap_vs_baseline": 0.0116,
+            "small_sample": false
+          },
+          {
+            "group": "Health and Beauty",
+            "value": 0.558,
+            "rows": 362,
+            "gap_vs_baseline": 0.0097,
+            "small_sample": false
+          },
+          {
+            "group": "Tennis & Racquet",
+            "value": 0.5579,
+            "rows": 328,
+            "gap_vs_baseline": 0.0096,
+            "small_sample": false
+          },
+          {
+            "group": "Garden",
+            "value": 0.5579,
+            "rows": 484,
+            "gap_vs_baseline": 0.0096,
+            "small_sample": false
+          },
+          {
+            "group": "Trade-In",
+            "value": 0.5565,
+            "rows": 974,
+            "gap_vs_baseline": 0.0082,
+            "small_sample": false
+          },
+          {
+            "group": "Golf Shoes",
+            "value": 0.5553,
+            "rows": 524,
+            "gap_vs_baseline": 0.0071,
+            "small_sample": false
+          },
+          {
+            "group": "Sporting Goods",
+            "value": 0.5546,
+            "rows": 357,
+            "gap_vs_baseline": 0.0063,
+            "small_sample": false
+          },
+          {
+            "group": "Girls' Apparel",
+            "value": 0.5529,
+            "rows": 1201,
+            "gap_vs_baseline": 0.0046,
+            "small_sample": false
+          },
+          {
+            "group": "Basketball",
+            "value": 0.5522,
+            "rows": 67,
+            "gap_vs_baseline": 0.0039,
+            "small_sample": true
+          },
+          {
+            "group": "Baseball & Softball",
+            "value": 0.5522,
+            "rows": 632,
+            "gap_vs_baseline": 0.0039,
+            "small_sample": false
+          },
+          {
+            "group": "Consumer Electronics",
+            "value": 0.5522,
+            "rows": 431,
+            "gap_vs_baseline": 0.0039,
+            "small_sample": false
+          },
+          {
+            "group": "Shop By Sport",
+            "value": 0.5515,
+            "rows": 10984,
+            "gap_vs_baseline": 0.0032,
+            "small_sample": false
+          },
+          {
+            "group": "Toys",
+            "value": 0.5501,
+            "rows": 529,
+            "gap_vs_baseline": 0.0018,
+            "small_sample": false
+          },
+          {
+            "group": "Cleats",
+            "value": 0.5497,
+            "rows": 24551,
+            "gap_vs_baseline": 0.0014,
+            "small_sample": false
+          },
+          {
+            "group": "Fishing",
+            "value": 0.5493,
+            "rows": 17325,
+            "gap_vs_baseline": 0.001,
+            "small_sample": false
+          },
+          {
+            "group": "Water Sports",
+            "value": 0.5481,
+            "rows": 15540,
+            "gap_vs_baseline": -0.0002,
+            "small_sample": false
+          },
+          {
+            "group": "Indoor/Outdoor Games",
+            "value": 0.5475,
+            "rows": 19298,
+            "gap_vs_baseline": -0.0008,
+            "small_sample": false
+          },
+          {
+            "group": "Golf Balls",
+            "value": 0.5458,
+            "rows": 1475,
+            "gap_vs_baseline": -0.0025,
+            "small_sample": false
+          },
+          {
+            "group": "Women's Apparel",
+            "value": 0.5456,
+            "rows": 21035,
+            "gap_vs_baseline": -0.0027,
+            "small_sample": false
+          },
+          {
+            "group": "Camping & Hiking",
+            "value": 0.5453,
+            "rows": 13729,
+            "gap_vs_baseline": -0.0029,
+            "small_sample": false
+          },
+          {
+            "group": "Cardio Equipment",
+            "value": 0.545,
+            "rows": 12487,
+            "gap_vs_baseline": -0.0033,
+            "small_sample": false
+          },
+          {
+            "group": "Men's Footwear",
+            "value": 0.5449,
+            "rows": 22246,
+            "gap_vs_baseline": -0.0034,
+            "small_sample": false
+          },
+          {
+            "group": "Soccer",
+            "value": 0.5435,
+            "rows": 138,
+            "gap_vs_baseline": -0.0048,
+            "small_sample": false
+          },
+          {
+            "group": "Men's Clothing",
+            "value": 0.5433,
+            "rows": 208,
+            "gap_vs_baseline": -0.005,
+            "small_sample": false
+          },
+          {
+            "group": "Video Games",
+            "value": 0.543,
+            "rows": 838,
+            "gap_vs_baseline": -0.0053,
+            "small_sample": false
+          },
+          {
+            "group": "DVDs",
+            "value": 0.5362,
+            "rows": 483,
+            "gap_vs_baseline": -0.0121,
+            "small_sample": false
+          },
+          {
+            "group": "Women's Golf Clubs",
+            "value": 0.5359,
+            "rows": 181,
+            "gap_vs_baseline": -0.0124,
+            "small_sample": false
+          },
+          {
+            "group": "Hockey",
+            "value": 0.5358,
+            "rows": 614,
+            "gap_vs_baseline": -0.0125,
+            "small_sample": false
+          },
+          {
+            "group": "Kids' Golf Clubs",
+            "value": 0.5339,
+            "rows": 384,
+            "gap_vs_baseline": -0.0144,
+            "small_sample": false
+          },
+          {
+            "group": "Children's Clothing",
+            "value": 0.5337,
+            "rows": 652,
+            "gap_vs_baseline": -0.0145,
+            "small_sample": false
+          },
+          {
+            "group": "Baby ",
+            "value": 0.5266,
+            "rows": 207,
+            "gap_vs_baseline": -0.0217,
+            "small_sample": false
+          },
+          {
+            "group": "CDs ",
+            "value": 0.5203,
+            "rows": 271,
+            "gap_vs_baseline": -0.028,
+            "small_sample": false
+          },
+          {
+            "group": "Golf Apparel",
+            "value": 0.5193,
+            "rows": 441,
+            "gap_vs_baseline": -0.029,
+            "small_sample": false
+          },
+          {
+            "group": "Computers",
+            "value": 0.5068,
+            "rows": 442,
+            "gap_vs_baseline": -0.0415,
+            "small_sample": false
+          },
+          {
+            "group": "Men's Golf Clubs",
+            "value": 0.477,
+            "rows": 283,
+            "gap_vs_baseline": -0.0713,
+            "small_sample": false
+          }
+        ],
+        "description": "late_rate by Category Name across 180,519 order lines, highest first. Overall: 54.8%. Highest: Golf Bags & Carts (68.8%); lowest: Men's Golf Clubs (47.7%)."
+      },
+      "is_error": false
+    },
+    {
+      "type": "note",
+      "text": "Product: Category: ruled out. Every reliable segment is within 5 pp of 54.8%; worst is Accessories at 57.0% (+2.1 pp)."
+    },
+    {
+      "type": "tool_call",
+      "call_id": "c5",
+      "tool": "trend_over_time",
+      "inputs": {
+        "metric": "late_rate",
+        "freq": "quarter"
+      }
+    },
+    {
+      "type": "tool_result",
+      "call_id": "c5",
+      "tool": "trend_over_time",
+      "result": {
+        "result_id": "R5",
+        "metric": "late_rate",
+        "metric_definition": "Share of order lines delivered late (0 to 1). Cancelled lines count as not late.",
+        "freq": "quarter",
+        "baseline": 0.5483,
+        "periods": [
+          {
+            "period": "2015Q1",
+            "value": 0.5456,
+            "rows": 15413,
+            "low_volume": false,
+            "gap_vs_baseline": -0.0026
+          },
+          {
+            "period": "2015Q2",
+            "value": 0.5436,
+            "rows": 15617,
+            "low_volume": false,
+            "gap_vs_baseline": -0.0047
+          },
+          {
+            "period": "2015Q3",
+            "value": 0.5594,
+            "rows": 15712,
+            "low_volume": false,
+            "gap_vs_baseline": 0.0111
+          },
+          {
+            "period": "2015Q4",
+            "value": 0.5459,
+            "rows": 15908,
+            "low_volume": false,
+            "gap_vs_baseline": -0.0024
+          },
+          {
+            "period": "2016Q1",
+            "value": 0.5518,
+            "rows": 15421,
+            "low_volume": false,
+            "gap_vs_baseline": 0.0036
+          },
+          {
+            "period": "2016Q2",
+            "value": 0.5591,
+            "rows": 15453,
+            "low_volume": false,
+            "gap_vs_baseline": 0.0108
+          },
+          {
+            "period": "2016Q3",
+            "value": 0.5405,
+            "rows": 15799,
+            "low_volume": false,
+            "gap_vs_baseline": -0.0078
+          },
+          {
+            "period": "2016Q4",
+            "value": 0.5516,
+            "rows": 15877,
+            "low_volume": false,
+            "gap_vs_baseline": 0.0033
+          },
+          {
+            "period": "2017Q1",
+            "value": 0.5452,
+            "rows": 15470,
+            "low_volume": false,
+            "gap_vs_baseline": -0.0031
+          },
+          {
+            "period": "2017Q2",
+            "value": 0.5359,
+            "rows": 15480,
+            "low_volume": false,
+            "gap_vs_baseline": -0.0124
+          },
+          {
+            "period": "2017Q3",
+            "value": 0.5515,
+            "rows": 15812,
+            "low_volume": false,
+            "gap_vs_baseline": 0.0033
+          },
+          {
+            "period": "2017Q4",
+            "value": 0.5462,
+            "rows": 6434,
+            "low_volume": true,
+            "gap_vs_baseline": -0.0021
+          },
+          {
+            "period": "2018Q1",
+            "value": 0.5629,
+            "rows": 2123,
+            "low_volume": true,
+            "gap_vs_baseline": 0.0146
+          }
+        ],
+        "description": "late_rate per quarter from 2015Q1 to 2018Q1 (13 periods). First: 54.6%; last: 56.3%. 2 period(s) have under half the usual order volume, so treat them with caution."
+      },
+      "is_error": false
+    },
+    {
+      "type": "note",
+      "text": "Time: quarterly trend: ruled out. Every reliable period is within 5 pp of 54.8%; worst is 2015Q3 at 55.9% (+1.1 pp)."
+    },
+    {
+      "type": "issue_tree",
+      "root": "What is driving late deliveries, and what should we do about it?",
+      "branches": [
+        {
+          "name": "Logistics: Shipping Mode",
+          "hypothesis": "Some shipping modes miss their promised lead time far more often.",
+          "status": "kept",
+          "evidence": "First Class at 95.3% vs 54.8% overall (+40.5 pp)."
+        },
+        {
+          "name": "Geography: Market",
+          "hypothesis": "Deliveries are late in particular regions.",
+          "status": "dropped",
+          "evidence": "Every reliable segment is within 5 pp of 54.8%; worst is Europe at 55.2% (+0.4 pp)."
+        },
+        {
+          "name": "Customer: Customer Segment",
+          "hypothesis": "Some customer types get worse service.",
+          "status": "dropped",
+          "evidence": "Every reliable segment is within 5 pp of 54.8%; worst is Home Office at 55.1% (+0.2 pp)."
+        },
+        {
+          "name": "Product: Category",
+          "hypothesis": "Certain products are harder to deliver on time.",
+          "status": "dropped",
+          "evidence": "Every reliable segment is within 5 pp of 54.8%; worst is Accessories at 57.0% (+2.1 pp)."
+        },
+        {
+          "name": "Time: quarterly trend",
+          "hypothesis": "Lateness has got worse recently.",
+          "status": "dropped",
+          "evidence": "Every reliable period is within 5 pp of 54.8%; worst is 2015Q3 at 55.9% (+1.1 pp)."
+        }
+      ]
+    },
+    {
+      "type": "tool_call",
+      "call_id": "c6",
+      "tool": "segment_analysis",
+      "inputs": {
+        "metric": "sales",
+        "group_by": "Shipping Mode"
+      }
+    },
+    {
+      "type": "tool_result",
+      "call_id": "c6",
+      "tool": "segment_analysis",
+      "result": {
+        "result_id": "R6",
+        "metric": "sales",
+        "metric_definition": "Total sales in dollars.",
+        "group_by": "Shipping Mode",
+        "rows_analysed": 180519,
+        "baseline": 36784735.0134,
+        "groups": [
+          {
+            "group": "Standard Class",
+            "value": 22022391.8798,
+            "rows": 107752,
+            "share_of_total": 0.5987,
+            "small_sample": false
+          },
+          {
+            "group": "Second Class",
+            "value": 7145444.8184,
+            "rows": 35216,
+            "share_of_total": 0.1943,
+            "small_sample": false
+          },
+          {
+            "group": "First Class",
+            "value": 5674369.7582,
+            "rows": 27814,
+            "share_of_total": 0.1543,
+            "small_sample": false
+          },
+          {
+            "group": "Same Day",
+            "value": 1942528.557,
+            "rows": 9737,
+            "share_of_total": 0.0528,
+            "small_sample": false
+          }
+        ],
+        "description": "sales by Shipping Mode across 180,519 order lines, highest first. Overall: $36,784,735. Highest: Standard Class ($22,022,392); lowest: Same Day ($1,942,529)."
+      },
+      "is_error": false
+    },
+    {
+      "type": "note",
+      "text": "Drilling into First Class: does it hold in every Market?"
+    },
+    {
+      "type": "tool_call",
+      "call_id": "c7",
+      "tool": "drill_down",
+      "inputs": {
+        "filters": {
+          "Shipping Mode": "First Class"
+        },
+        "group_by": "Market",
+        "metric": "late_rate"
+      }
+    },
+    {
+      "type": "tool_result",
+      "call_id": "c7",
+      "tool": "drill_down",
+      "result": {
+        "result_id": "R7",
+        "metric": "late_rate",
+        "metric_definition": "Share of order lines delivered late (0 to 1). Cancelled lines count as not late.",
+        "filters": {
+          "Shipping Mode": "First Class"
+        },
+        "group_by": "Market",
+        "rows_analysed": 27814,
+        "baseline": 0.9532,
+        "company_baseline": 0.5483,
+        "groups": [
+          {
+            "group": "Africa",
+            "value": 0.9699,
+            "rows": 1727,
+            "gap_vs_baseline": 0.0167,
+            "small_sample": false
+          },
+          {
+            "group": "Europe",
+            "value": 0.9582,
+            "rows": 7892,
+            "gap_vs_baseline": 0.005,
+            "small_sample": false
+          },
+          {
+            "group": "USCA",
+            "value": 0.9516,
+            "rows": 4008,
+            "gap_vs_baseline": -0.0016,
+            "small_sample": false
+          },
+          {
+            "group": "Pacific Asia",
+            "value": 0.9508,
+            "rows": 6301,
+            "gap_vs_baseline": -0.0024,
+            "small_sample": false
+          },
+          {
+            "group": "LATAM",
+            "value": 0.9474,
+            "rows": 7886,
+            "gap_vs_baseline": -0.0058,
+            "small_sample": false
+          }
+        ],
+        "description": "Within {'Shipping Mode': 'First Class'}: late_rate by Market across 27,814 order lines, highest first. Overall: 95.3%. Highest: Africa (97.0%); lowest: LATAM (94.7%). Company-wide: 54.8%."
+      },
+      "is_error": false
+    },
+    {
+      "type": "tool_call",
+      "call_id": "c8",
+      "tool": "impact_estimate",
+      "inputs": {
+        "filter_column": "Shipping Mode",
+        "filter_value": "First Class"
+      }
+    },
+    {
+      "type": "tool_result",
+      "call_id": "c8",
+      "tool": "impact_estimate",
+      "result": {
+        "result_id": "R8",
+        "segment": {
+          "column": "Shipping Mode",
+          "value": "First Class"
+        },
+        "rows": 27814,
+        "late_rows": 26513,
+        "late_rate": 0.9532,
+        "segment_sales": 5674369.7582,
+        "segment_profit": 643121.9207,
+        "late_sales": 5408068.5629,
+        "late_profit": 616596.7307,
+        "late_share_of_segment_sales": 0.9531,
+        "late_sales_share_of_company_sales": 0.147,
+        "late_profit_share_of_company_profit": 0.1554,
+        "description": "In Shipping Mode = First Class, 26,513 of 27,814 order lines were late, carrying $5,408,069 in sales and $616,597 in profit. That is 14.7% of all company sales. These are the amounts exposed to late delivery, not a measured loss."
+      },
+      "is_error": false
+    },
+    {
+      "type": "issue_tree",
+      "root": "What is driving late deliveries, and what should we do about it?",
+      "branches": [
+        {
+          "name": "Logistics: Shipping Mode",
+          "hypothesis": "Some shipping modes miss their promised lead time far more often.",
+          "status": "kept",
+          "evidence": "First Class at 95.3% vs 54.8% overall (+40.5 pp).",
+          "sub_branches": [
+            {
+              "name": "First Class across Market",
+              "status": "kept",
+              "evidence": "From LATAM (94.7%) to Africa (97.0%): the problem holds in every Market."
+            }
+          ]
+        },
+        {
+          "name": "Geography: Market",
+          "hypothesis": "Deliveries are late in particular regions.",
+          "status": "dropped",
+          "evidence": "Every reliable segment is within 5 pp of 54.8%; worst is Europe at 55.2% (+0.4 pp)."
+        },
+        {
+          "name": "Customer: Customer Segment",
+          "hypothesis": "Some customer types get worse service.",
+          "status": "dropped",
+          "evidence": "Every reliable segment is within 5 pp of 54.8%; worst is Home Office at 55.1% (+0.2 pp)."
+        },
+        {
+          "name": "Product: Category",
+          "hypothesis": "Certain products are harder to deliver on time.",
+          "status": "dropped",
+          "evidence": "Every reliable segment is within 5 pp of 54.8%; worst is Accessories at 57.0% (+2.1 pp)."
+        },
+        {
+          "name": "Time: quarterly trend",
+          "hypothesis": "Lateness has got worse recently.",
+          "status": "dropped",
+          "evidence": "Every reliable period is within 5 pp of 54.8%; worst is 2015Q3 at 55.9% (+1.1 pp)."
+        }
+      ]
+    },
+    {
+      "type": "tool_call",
+      "call_id": "c9",
+      "tool": "make_chart",
+      "inputs": {
+        "result_id": "R1",
+        "chart_type": "bar",
+        "title": "Late-delivery rate by Shipping Mode"
+      }
+    },
+    {
+      "type": "tool_result",
+      "call_id": "c9",
+      "tool": "make_chart",
+      "result": {
+        "path": "C:\\Users\\vishw\\OneDrive\\Desktop\\CAT 2025\\IIM U DEM\\Placement\\AI Agent\\Supply Chain Agent\\outputs\\late-delivery-rate-by-shipping-mode_20260927_151515_086495.html",
+        "chart_type": "bar",
+        "title": "Late-delivery rate by Shipping Mode",
+        "description": "Saved a bar chart titled 'Late-delivery rate by Shipping Mode' to late-delivery-rate-by-shipping-mode_20260927_151515_086495.html."
+      },
+      "is_error": false
+    },
+    {
+      "type": "chart",
+      "path": "C:\\Users\\vishw\\OneDrive\\Desktop\\CAT 2025\\IIM U DEM\\Placement\\AI Agent\\Supply Chain Agent\\outputs\\late-delivery-rate-by-shipping-mode_20260927_151515_086495.html",
+      "title": "Late-delivery rate by Shipping Mode",
+      "chart_type": "bar",
+      "result_id": "R1"
+    },
+    {
+      "type": "tool_call",
+      "call_id": "c10",
+      "tool": "make_chart",
+      "inputs": {
+        "result_id": "R5",
+        "chart_type": "line",
+        "title": "Late-delivery rate by quarter"
+      }
+    },
+    {
+      "type": "tool_result",
+      "call_id": "c10",
+      "tool": "make_chart",
+      "result": {
+        "path": "C:\\Users\\vishw\\OneDrive\\Desktop\\CAT 2025\\IIM U DEM\\Placement\\AI Agent\\Supply Chain Agent\\outputs\\late-delivery-rate-by-quarter_20260927_151515_891015.html",
+        "chart_type": "line",
+        "title": "Late-delivery rate by quarter",
+        "description": "Saved a line chart titled 'Late-delivery rate by quarter' to late-delivery-rate-by-quarter_20260927_151515_891015.html."
+      },
+      "is_error": false
+    },
+    {
+      "type": "chart",
+      "path": "C:\\Users\\vishw\\OneDrive\\Desktop\\CAT 2025\\IIM U DEM\\Placement\\AI Agent\\Supply Chain Agent\\outputs\\late-delivery-rate-by-quarter_20260927_151515_891015.html",
+      "title": "Late-delivery rate by quarter",
+      "chart_type": "line",
+      "result_id": "R5"
+    },
+    {
+      "type": "note",
+      "text": "Writing the summary."
+    },
+    {
+      "type": "summary",
+      "text": "## Executive summary\n\n**The late-delivery rate is driven by Shipping Mode: First Class runs at 95.3% against 54.8% overall (+40.5 pp).**\n\n**Key drivers**\n- **Shipping Mode:** First Class at 95.3% vs 54.8% overall (+40.5 pp). From LATAM (94.7%) to Africa (97.0%): the problem holds in every Market.\n\n**Recommendations**\n1. **Reset the promised lead time for First Class to what the network actually delivers.** Impact: High, effort: Low.\n2. **Audit promised versus actual lead times across every shipping mode.** Impact: High, effort: Medium.\n3. **Run an execution review of First Class with carriers and warehouses.** Impact: High, effort: High.\n\n## Question\n\nWhat is driving late deliveries, and what should we do about it? Measured by the late-delivery rate: Share of order lines delivered late (0 to 1). Cancelled lines count as not late.\n\n## Issue tree and findings\n\n| Branch | Hypothesis | Verdict | Evidence |\n|---|---|---|---|\n| Logistics: Shipping Mode | Some shipping modes miss their promised lead time far more often. | **Driver** | First Class at 95.3% vs 54.8% overall (+40.5 pp). |\n| Geography: Market | Deliveries are late in particular regions. | Ruled out | Every reliable segment is within 5 pp of 54.8%; worst is Europe at 55.2% (+0.4 pp). |\n| Customer: Customer Segment | Some customer types get worse service. | Ruled out | Every reliable segment is within 5 pp of 54.8%; worst is Home Office at 55.1% (+0.2 pp). |\n| Product: Category | Certain products are harder to deliver on time. | Ruled out | Every reliable segment is within 5 pp of 54.8%; worst is Accessories at 57.0% (+2.1 pp). |\n| Time: quarterly trend | Lateness has got worse recently. | Ruled out | Every reliable period is within 5 pp of 54.8%; worst is 2015Q3 at 55.9% (+1.1 pp). |\n\n## Impact\n\n- **First Class:** 26,513 of 27,814 order lines were late, carrying $5.41M in sales (14.7% of company sales) and $617K in profit.\n- By total sales, Standard Class contributes the most ($22.02M, 59.9% of the total) and Same Day the least ($1.94M, 5.3%).\n- These are sales and profit exposed to late delivery, not measured losses.\n\n## Recommendations\n\n| # | Action | Why | Impact | Effort | First step |\n|---|---|---|---|---|---|\n| 1 | Reset the promised lead time for First Class to what the network actually delivers | Shipping Mode: First Class at 95.3% vs 54.8% overall (+40.5 pp). | High | Low | Compare promised and actual shipping days for First Class, then update the customer promise. |\n| 2 | Audit promised versus actual lead times across every shipping mode | A company-wide safeguard alongside the fixes above. | High | Medium | Pull promised and actual shipping days per order for one month. |\n| 3 | Run an execution review of First Class with carriers and warehouses | Shipping Mode: First Class at 95.3% vs 54.8% overall (+40.5 pp). | High | High | Agree an on-time target for First Class with each carrier and track it weekly. |\n\n## Method and caveats\n\n- Rule: a branch is a driver if its worst segment with at least 1,000 order lines is more than 5 pp worse than the baseline. Smaller segments are too noisy to act on.\n- Counts are order lines (a product within an order), not whole orders.\n- Periods with unusually low volume were left out of the trend test: 2017Q4, 2018Q1.\n- Produced by the scripted brain: fixed rules, no AI model. Every number comes from a tool result."
+    },
+    {
+      "type": "run_end",
+      "status": "complete",
+      "stats": {
+        "tool_calls": 10,
+        "charts": 2,
+        "seconds": 9.2,
+        "question_type": "late_deliveries",
+        "drivers": 1,
+        "unsupported_numbers": []
+      }
+    }
+  ]
+}
