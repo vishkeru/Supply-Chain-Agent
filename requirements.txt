@@ -1,0 +1,9 @@
+pandas
+anthropic
+streamlit
+plotly
+python-dotenv
+pytest
+requests
+ipykernel
+nbformat

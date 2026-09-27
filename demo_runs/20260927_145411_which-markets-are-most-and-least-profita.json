@@ -1,0 +1,963 @@
+{
+  "question": "Which markets are most and least profitable, and why?",
+  "brain": "Scripted (no LLM)",
+  "timestamp": "2026-09-27 14:54",
+  "seconds": 10,
+  "events": [
+    {
+      "type": "run_start",
+      "question": "Which markets are most and least profitable, and why?",
+      "brain": "scripted"
+    },
+    {
+      "type": "note",
+      "text": "Question type: profitability. I'll test every branch on the share of loss-making order lines."
+    },
+    {
+      "type": "issue_tree",
+      "root": "Where are we losing money, and is it a market problem?",
+      "branches": [
+        {
+          "name": "Logistics: Shipping Mode",
+          "hypothesis": "Shipping costs make some modes unprofitable.",
+          "status": "untested",
+          "evidence": ""
+        },
+        {
+          "name": "Geography: Market",
+          "hypothesis": "Some markets sell at a loss more often (pricing, discounts, costs).",
+          "status": "untested",
+          "evidence": ""
+        },
+        {
+          "name": "Customer: Customer Segment",
+          "hypothesis": "Some customer types get unprofitable deals.",
+          "status": "untested",
+          "evidence": ""
+        },
+        {
+          "name": "Product: Category",
+          "hypothesis": "Some product categories are sold below cost.",
+          "status": "untested",
+          "evidence": ""
+        },
+        {
+          "name": "Time: quarterly trend",
+          "hypothesis": "Losses have grown recently.",
+          "status": "untested",
+          "evidence": ""
+        }
+      ]
+    },
+    {
+      "type": "tool_call",
+      "call_id": "c1",
+      "tool": "segment_analysis",
+      "inputs": {
+        "metric": "loss_rate",
+        "group_by": "Shipping Mode"
+      }
+    },
+    {
+      "type": "tool_result",
+      "call_id": "c1",
+      "tool": "segment_analysis",
+      "result": {
+        "result_id": "R1",
+        "metric": "loss_rate",
+        "metric_definition": "Share of order lines that lose money (profit below zero), 0 to 1.",
+        "group_by": "Shipping Mode",
+        "rows_analysed": 180519,
+        "baseline": 0.1871,
+        "groups": [
+          {
+            "group": "Standard Class",
+            "value": 0.1886,
+            "rows": 107752,
+            "gap_vs_baseline": 0.0014,
+            "small_sample": false
+          },
+          {
+            "group": "Same Day",
+            "value": 0.1885,
+            "rows": 9737,
+            "gap_vs_baseline": 0.0013,
+            "small_sample": false
+          },
+          {
+            "group": "Second Class",
+            "value": 0.1854,
+            "rows": 35216,
+            "gap_vs_baseline": -0.0018,
+            "small_sample": false
+          },
+          {
+            "group": "First Class",
+            "value": 0.1834,
+            "rows": 27814,
+            "gap_vs_baseline": -0.0037,
+            "small_sample": false
+          }
+        ],
+        "description": "loss_rate by Shipping Mode across 180,519 order lines, highest first. Overall: 18.7%. Highest: Standard Class (18.9%); lowest: First Class (18.3%)."
+      },
+      "is_error": false
+    },
+    {
+      "type": "note",
+      "text": "Logistics: Shipping Mode: ruled out. Every reliable segment is within 5 pp of 18.7%; worst is Standard Class at 18.9% (+0.1 pp)."
+    },
+    {
+      "type": "tool_call",
+      "call_id": "c2",
+      "tool": "segment_analysis",
+      "inputs": {
+        "metric": "loss_rate",
+        "group_by": "Market"
+      }
+    },
+    {
+      "type": "tool_result",
+      "call_id": "c2",
+      "tool": "segment_analysis",
+      "result": {
+        "result_id": "R2",
+        "metric": "loss_rate",
+        "metric_definition": "Share of order lines that lose money (profit below zero), 0 to 1.",
+        "group_by": "Market",
+        "rows_analysed": 180519,
+        "baseline": 0.1871,
+        "groups": [
+          {
+            "group": "Pacific Asia",
+            "value": 0.1892,
+            "rows": 41260,
+            "gap_vs_baseline": 0.002,
+            "small_sample": false
+          },
+          {
+            "group": "Europe",
+            "value": 0.1875,
+            "rows": 50252,
+            "gap_vs_baseline": 0.0003,
+            "small_sample": false
+          },
+          {
+            "group": "USCA",
+            "value": 0.1865,
+            "rows": 25799,
+            "gap_vs_baseline": -0.0006,
+            "small_sample": false
+          },
+          {
+            "group": "LATAM",
+            "value": 0.1858,
+            "rows": 51594,
+            "gap_vs_baseline": -0.0013,
+            "small_sample": false
+          },
+          {
+            "group": "Africa",
+            "value": 0.1858,
+            "rows": 11614,
+            "gap_vs_baseline": -0.0013,
+            "small_sample": false
+          }
+        ],
+        "description": "loss_rate by Market across 180,519 order lines, highest first. Overall: 18.7%. Highest: Pacific Asia (18.9%); lowest: Africa (18.6%)."
+      },
+      "is_error": false
+    },
+    {
+      "type": "note",
+      "text": "Geography: Market: ruled out. Every reliable segment is within 5 pp of 18.7%; worst is Pacific Asia at 18.9% (+0.2 pp)."
+    },
+    {
+      "type": "tool_call",
+      "call_id": "c3",
+      "tool": "segment_analysis",
+      "inputs": {
+        "metric": "loss_rate",
+        "group_by": "Customer Segment"
+      }
+    },
+    {
+      "type": "tool_result",
+      "call_id": "c3",
+      "tool": "segment_analysis",
+      "result": {
+        "result_id": "R3",
+        "metric": "loss_rate",
+        "metric_definition": "Share of order lines that lose money (profit below zero), 0 to 1.",
+        "group_by": "Customer Segment",
+        "rows_analysed": 180519,
+        "baseline": 0.1871,
+        "groups": [
+          {
+            "group": "Home Office",
+            "value": 0.1885,
+            "rows": 32226,
+            "gap_vs_baseline": 0.0013,
+            "small_sample": false
+          },
+          {
+            "group": "Corporate",
+            "value": 0.1882,
+            "rows": 54789,
+            "gap_vs_baseline": 0.0011,
+            "small_sample": false
+          },
+          {
+            "group": "Consumer",
+            "value": 0.186,
+            "rows": 93504,
+            "gap_vs_baseline": -0.0011,
+            "small_sample": false
+          }
+        ],
+        "description": "loss_rate by Customer Segment across 180,519 order lines, highest first. Overall: 18.7%. Highest: Home Office (18.9%); lowest: Consumer (18.6%)."
+      },
+      "is_error": false
+    },
+    {
+      "type": "note",
+      "text": "Customer: Customer Segment: ruled out. Every reliable segment is within 5 pp of 18.7%; worst is Home Office at 18.9% (+0.1 pp)."
+    },
+    {
+      "type": "tool_call",
+      "call_id": "c4",
+      "tool": "segment_analysis",
+      "inputs": {
+        "metric": "loss_rate",
+        "group_by": "Category Name"
+      }
+    },
+    {
+      "type": "tool_result",
+      "call_id": "c4",
+      "tool": "segment_analysis",
+      "result": {
+        "result_id": "R4",
+        "metric": "loss_rate",
+        "metric_definition": "Share of order lines that lose money (profit below zero), 0 to 1.",
+        "group_by": "Category Name",
+        "rows_analysed": 180519,
+        "baseline": 0.1871,
+        "groups": [
+          {
+            "group": "Men's Clothing",
+            "value": 0.2404,
+            "rows": 208,
+            "gap_vs_baseline": 0.0532,
+            "small_sample": false
+          },
+          {
+            "group": "Health and Beauty",
+            "value": 0.2348,
+            "rows": 362,
+            "gap_vs_baseline": 0.0477,
+            "small_sample": false
+          },
+          {
+            "group": "Video Games",
+            "value": 0.216,
+            "rows": 838,
+            "gap_vs_baseline": 0.0288,
+            "small_sample": false
+          },
+          {
+            "group": "Golf Shoes",
+            "value": 0.2118,
+            "rows": 524,
+            "gap_vs_baseline": 0.0247,
+            "small_sample": false
+          },
+          {
+            "group": "Pet Supplies",
+            "value": 0.2114,
+            "rows": 492,
+            "gap_vs_baseline": 0.0242,
+            "small_sample": false
+          },
+          {
+            "group": "DVDs",
+            "value": 0.2112,
+            "rows": 483,
+            "gap_vs_baseline": 0.024,
+            "small_sample": false
+          },
+          {
+            "group": "As Seen on  TV!",
+            "value": 0.2059,
+            "rows": 68,
+            "gap_vs_baseline": 0.0187,
+            "small_sample": true
+          },
+          {
+            "group": "Kids' Golf Clubs",
+            "value": 0.2005,
+            "rows": 384,
+            "gap_vs_baseline": 0.0134,
+            "small_sample": false
+          },
+          {
+            "group": "Golf Apparel",
+            "value": 0.1995,
+            "rows": 441,
+            "gap_vs_baseline": 0.0124,
+            "small_sample": false
+          },
+          {
+            "group": "Crafts",
+            "value": 0.1983,
+            "rows": 484,
+            "gap_vs_baseline": 0.0112,
+            "small_sample": false
+          },
+          {
+            "group": "Shop By Sport",
+            "value": 0.1961,
+            "rows": 10984,
+            "gap_vs_baseline": 0.009,
+            "small_sample": false
+          },
+          {
+            "group": "Tennis & Racquet",
+            "value": 0.1951,
+            "rows": 328,
+            "gap_vs_baseline": 0.008,
+            "small_sample": false
+          },
+          {
+            "group": "Hunting & Shooting",
+            "value": 0.1932,
+            "rows": 440,
+            "gap_vs_baseline": 0.006,
+            "small_sample": false
+          },
+          {
+            "group": "Girls' Apparel",
+            "value": 0.1932,
+            "rows": 1201,
+            "gap_vs_baseline": 0.006,
+            "small_sample": false
+          },
+          {
+            "group": "Books ",
+            "value": 0.1926,
+            "rows": 405,
+            "gap_vs_baseline": 0.0054,
+            "small_sample": false
+          },
+          {
+            "group": "Children's Clothing",
+            "value": 0.1917,
+            "rows": 652,
+            "gap_vs_baseline": 0.0046,
+            "small_sample": false
+          },
+          {
+            "group": "Boxing & MMA",
+            "value": 0.1891,
+            "rows": 423,
+            "gap_vs_baseline": 0.002,
+            "small_sample": false
+          },
+          {
+            "group": "Camping & Hiking",
+            "value": 0.1887,
+            "rows": 13729,
+            "gap_vs_baseline": 0.0015,
+            "small_sample": false
+          },
+          {
+            "group": "Water Sports",
+            "value": 0.1882,
+            "rows": 15540,
+            "gap_vs_baseline": 0.001,
+            "small_sample": false
+          },
+          {
+            "group": "Indoor/Outdoor Games",
+            "value": 0.1874,
+            "rows": 19298,
+            "gap_vs_baseline": 0.0003,
+            "small_sample": false
+          },
+          {
+            "group": "Men's Footwear",
+            "value": 0.1874,
+            "rows": 22246,
+            "gap_vs_baseline": 0.0003,
+            "small_sample": false
+          },
+          {
+            "group": "Cleats",
+            "value": 0.187,
+            "rows": 24551,
+            "gap_vs_baseline": -0.0002,
+            "small_sample": false
+          },
+          {
+            "group": "Cardio Equipment",
+            "value": 0.1868,
+            "rows": 12487,
+            "gap_vs_baseline": -0.0004,
+            "small_sample": false
+          },
+          {
+            "group": "Women's Apparel",
+            "value": 0.1865,
+            "rows": 21035,
+            "gap_vs_baseline": -0.0007,
+            "small_sample": false
+          },
+          {
+            "group": "Fishing",
+            "value": 0.1852,
+            "rows": 17325,
+            "gap_vs_baseline": -0.0019,
+            "small_sample": false
+          },
+          {
+            "group": "Music",
+            "value": 0.1843,
+            "rows": 434,
+            "gap_vs_baseline": -0.0028,
+            "small_sample": false
+          },
+          {
+            "group": "Consumer Electronics",
+            "value": 0.1833,
+            "rows": 431,
+            "gap_vs_baseline": -0.0039,
+            "small_sample": false
+          },
+          {
+            "group": "Cameras ",
+            "value": 0.1824,
+            "rows": 592,
+            "gap_vs_baseline": -0.0047,
+            "small_sample": false
+          },
+          {
+            "group": "Trade-In",
+            "value": 0.1817,
+            "rows": 974,
+            "gap_vs_baseline": -0.0054,
+            "small_sample": false
+          },
+          {
+            "group": "Hockey",
+            "value": 0.1808,
+            "rows": 614,
+            "gap_vs_baseline": -0.0064,
+            "small_sample": false
+          },
+          {
+            "group": "Lacrosse",
+            "value": 0.1808,
+            "rows": 343,
+            "gap_vs_baseline": -0.0064,
+            "small_sample": false
+          },
+          {
+            "group": "Accessories",
+            "value": 0.1792,
+            "rows": 1780,
+            "gap_vs_baseline": -0.0079,
+            "small_sample": false
+          },
+          {
+            "group": "Golf Balls",
+            "value": 0.1783,
+            "rows": 1475,
+            "gap_vs_baseline": -0.0088,
+            "small_sample": false
+          },
+          {
+            "group": "Electronics",
+            "value": 0.1781,
+            "rows": 3156,
+            "gap_vs_baseline": -0.0091,
+            "small_sample": false
+          },
+          {
+            "group": "Soccer",
+            "value": 0.1739,
+            "rows": 138,
+            "gap_vs_baseline": -0.0132,
+            "small_sample": false
+          },
+          {
+            "group": "Women's Golf Clubs",
+            "value": 0.1713,
+            "rows": 181,
+            "gap_vs_baseline": -0.0159,
+            "small_sample": false
+          },
+          {
+            "group": "Garden",
+            "value": 0.1694,
+            "rows": 484,
+            "gap_vs_baseline": -0.0177,
+            "small_sample": false
+          },
+          {
+            "group": "Golf Gloves",
+            "value": 0.1682,
+            "rows": 1070,
+            "gap_vs_baseline": -0.0189,
+            "small_sample": false
+          },
+          {
+            "group": "Sporting Goods",
+            "value": 0.1681,
+            "rows": 357,
+            "gap_vs_baseline": -0.0191,
+            "small_sample": false
+          },
+          {
+            "group": "Baseball & Softball",
+            "value": 0.1677,
+            "rows": 632,
+            "gap_vs_baseline": -0.0194,
+            "small_sample": false
+          },
+          {
+            "group": "Computers",
+            "value": 0.1652,
+            "rows": 442,
+            "gap_vs_baseline": -0.022,
+            "small_sample": false
+          },
+          {
+            "group": "Women's Clothing",
+            "value": 0.1646,
+            "rows": 650,
+            "gap_vs_baseline": -0.0225,
+            "small_sample": false
+          },
+          {
+            "group": "Baby ",
+            "value": 0.1643,
+            "rows": 207,
+            "gap_vs_baseline": -0.0229,
+            "small_sample": false
+          },
+          {
+            "group": "Basketball",
+            "value": 0.1642,
+            "rows": 67,
+            "gap_vs_baseline": -0.023,
+            "small_sample": true
+          },
+          {
+            "group": "Strength Training",
+            "value": 0.1622,
+            "rows": 111,
+            "gap_vs_baseline": -0.025,
+            "small_sample": false
+          },
+          {
+            "group": "Fitness Accessories",
+            "value": 0.1618,
+            "rows": 309,
+            "gap_vs_baseline": -0.0253,
+            "small_sample": false
+          },
+          {
+            "group": "Toys",
+            "value": 0.155,
+            "rows": 529,
+            "gap_vs_baseline": -0.0321,
+            "small_sample": false
+          },
+          {
+            "group": "Men's Golf Clubs",
+            "value": 0.1519,
+            "rows": 283,
+            "gap_vs_baseline": -0.0352,
+            "small_sample": false
+          },
+          {
+            "group": "CDs ",
+            "value": 0.1328,
+            "rows": 271,
+            "gap_vs_baseline": -0.0543,
+            "small_sample": false
+          },
+          {
+            "group": "Golf Bags & Carts",
+            "value": 0.0984,
+            "rows": 61,
+            "gap_vs_baseline": -0.0888,
+            "small_sample": true
+          }
+        ],
+        "description": "loss_rate by Category Name across 180,519 order lines, highest first. Overall: 18.7%. Highest: Men's Clothing (24.0%); lowest: Golf Bags & Carts (9.8%)."
+      },
+      "is_error": false
+    },
+    {
+      "type": "note",
+      "text": "Product: Category: ruled out. Every reliable segment is within 5 pp of 18.7%; worst is Shop By Sport at 19.6% (+0.9 pp)."
+    },
+    {
+      "type": "tool_call",
+      "call_id": "c5",
+      "tool": "trend_over_time",
+      "inputs": {
+        "metric": "loss_rate",
+        "freq": "quarter"
+      }
+    },
+    {
+      "type": "tool_result",
+      "call_id": "c5",
+      "tool": "trend_over_time",
+      "result": {
+        "result_id": "R5",
+        "metric": "loss_rate",
+        "metric_definition": "Share of order lines that lose money (profit below zero), 0 to 1.",
+        "freq": "quarter",
+        "baseline": 0.1871,
+        "periods": [
+          {
+            "period": "2015Q1",
+            "value": 0.1851,
+            "rows": 15413,
+            "low_volume": false,
+            "gap_vs_baseline": -0.002
+          },
+          {
+            "period": "2015Q2",
+            "value": 0.189,
+            "rows": 15617,
+            "low_volume": false,
+            "gap_vs_baseline": 0.0018
+          },
+          {
+            "period": "2015Q3",
+            "value": 0.1857,
+            "rows": 15712,
+            "low_volume": false,
+            "gap_vs_baseline": -0.0014
+          },
+          {
+            "period": "2015Q4",
+            "value": 0.1876,
+            "rows": 15908,
+            "low_volume": false,
+            "gap_vs_baseline": 0.0004
+          },
+          {
+            "period": "2016Q1",
+            "value": 0.1945,
+            "rows": 15421,
+            "low_volume": false,
+            "gap_vs_baseline": 0.0074
+          },
+          {
+            "period": "2016Q2",
+            "value": 0.1857,
+            "rows": 15453,
+            "low_volume": false,
+            "gap_vs_baseline": -0.0015
+          },
+          {
+            "period": "2016Q3",
+            "value": 0.1869,
+            "rows": 15799,
+            "low_volume": false,
+            "gap_vs_baseline": -0.0002
+          },
+          {
+            "period": "2016Q4",
+            "value": 0.1881,
+            "rows": 15877,
+            "low_volume": false,
+            "gap_vs_baseline": 0.0009
+          },
+          {
+            "period": "2017Q1",
+            "value": 0.1803,
+            "rows": 15470,
+            "low_volume": false,
+            "gap_vs_baseline": -0.0069
+          },
+          {
+            "period": "2017Q2",
+            "value": 0.1924,
+            "rows": 15480,
+            "low_volume": false,
+            "gap_vs_baseline": 0.0053
+          },
+          {
+            "period": "2017Q3",
+            "value": 0.1832,
+            "rows": 15812,
+            "low_volume": false,
+            "gap_vs_baseline": -0.0039
+          },
+          {
+            "period": "2017Q4",
+            "value": 0.1859,
+            "rows": 6434,
+            "low_volume": true,
+            "gap_vs_baseline": -0.0013
+          },
+          {
+            "period": "2018Q1",
+            "value": 0.1927,
+            "rows": 2123,
+            "low_volume": true,
+            "gap_vs_baseline": 0.0055
+          }
+        ],
+        "description": "loss_rate per quarter from 2015Q1 to 2018Q1 (13 periods). First: 18.5%; last: 19.3%. 2 period(s) have under half the usual order volume, so treat them with caution."
+      },
+      "is_error": false
+    },
+    {
+      "type": "note",
+      "text": "Time: quarterly trend: ruled out. Every reliable period is within 5 pp of 18.7%; worst is 2016Q1 at 19.4% (+0.7 pp)."
+    },
+    {
+      "type": "issue_tree",
+      "root": "Where are we losing money, and is it a market problem?",
+      "branches": [
+        {
+          "name": "Logistics: Shipping Mode",
+          "hypothesis": "Shipping costs make some modes unprofitable.",
+          "status": "dropped",
+          "evidence": "Every reliable segment is within 5 pp of 18.7%; worst is Standard Class at 18.9% (+0.1 pp)."
+        },
+        {
+          "name": "Geography: Market",
+          "hypothesis": "Some markets sell at a loss more often (pricing, discounts, costs).",
+          "status": "dropped",
+          "evidence": "Every reliable segment is within 5 pp of 18.7%; worst is Pacific Asia at 18.9% (+0.2 pp)."
+        },
+        {
+          "name": "Customer: Customer Segment",
+          "hypothesis": "Some customer types get unprofitable deals.",
+          "status": "dropped",
+          "evidence": "Every reliable segment is within 5 pp of 18.7%; worst is Home Office at 18.9% (+0.1 pp)."
+        },
+        {
+          "name": "Product: Category",
+          "hypothesis": "Some product categories are sold below cost.",
+          "status": "dropped",
+          "evidence": "Every reliable segment is within 5 pp of 18.7%; worst is Shop By Sport at 19.6% (+0.9 pp)."
+        },
+        {
+          "name": "Time: quarterly trend",
+          "hypothesis": "Losses have grown recently.",
+          "status": "dropped",
+          "evidence": "Every reliable period is within 5 pp of 18.7%; worst is 2016Q1 at 19.4% (+0.7 pp)."
+        }
+      ]
+    },
+    {
+      "type": "tool_call",
+      "call_id": "c6",
+      "tool": "segment_analysis",
+      "inputs": {
+        "metric": "profit",
+        "group_by": "Market"
+      }
+    },
+    {
+      "type": "tool_result",
+      "call_id": "c6",
+      "tool": "segment_analysis",
+      "result": {
+        "result_id": "R6",
+        "metric": "profit",
+        "metric_definition": "Total profit in dollars (recorded per order line despite the column name).",
+        "group_by": "Market",
+        "rows_analysed": 180519,
+        "baseline": 3966902.9741,
+        "groups": [
+          {
+            "group": "Europe",
+            "value": 1169442.961,
+            "rows": 50252,
+            "share_of_total": 0.2948,
+            "small_sample": false
+          },
+          {
+            "group": "LATAM",
+            "value": 1123321.6115,
+            "rows": 51594,
+            "share_of_total": 0.2832,
+            "small_sample": false
+          },
+          {
+            "group": "Pacific Asia",
+            "value": 857753.4411,
+            "rows": 41260,
+            "share_of_total": 0.2162,
+            "small_sample": false
+          },
+          {
+            "group": "USCA",
+            "value": 564313.7804,
+            "rows": 25799,
+            "share_of_total": 0.1423,
+            "small_sample": false
+          },
+          {
+            "group": "Africa",
+            "value": 252071.1801,
+            "rows": 11614,
+            "share_of_total": 0.0635,
+            "small_sample": false
+          }
+        ],
+        "description": "profit by Market across 180,519 order lines, highest first. Overall: $3,966,903. Highest: Europe ($1,169,443); lowest: Africa ($252,071)."
+      },
+      "is_error": false
+    },
+    {
+      "type": "tool_call",
+      "call_id": "c7",
+      "tool": "segment_analysis",
+      "inputs": {
+        "metric": "sales",
+        "group_by": "Market"
+      }
+    },
+    {
+      "type": "tool_result",
+      "call_id": "c7",
+      "tool": "segment_analysis",
+      "result": {
+        "result_id": "R7",
+        "metric": "sales",
+        "metric_definition": "Total sales in dollars.",
+        "group_by": "Market",
+        "rows_analysed": 180519,
+        "baseline": 36784735.0134,
+        "groups": [
+          {
+            "group": "Europe",
+            "value": 10872396.7957,
+            "rows": 50252,
+            "share_of_total": 0.2956,
+            "small_sample": false
+          },
+          {
+            "group": "LATAM",
+            "value": 10277612.8409,
+            "rows": 51594,
+            "share_of_total": 0.2794,
+            "small_sample": false
+          },
+          {
+            "group": "Pacific Asia",
+            "value": 8273743.7406,
+            "rows": 41260,
+            "share_of_total": 0.2249,
+            "small_sample": false
+          },
+          {
+            "group": "USCA",
+            "value": 5066528.711,
+            "rows": 25799,
+            "share_of_total": 0.1377,
+            "small_sample": false
+          },
+          {
+            "group": "Africa",
+            "value": 2294452.9252,
+            "rows": 11614,
+            "share_of_total": 0.0624,
+            "small_sample": false
+          }
+        ],
+        "description": "sales by Market across 180,519 order lines, highest first. Overall: $36,784,735. Highest: Europe ($10,872,397); lowest: Africa ($2,294,453)."
+      },
+      "is_error": false
+    },
+    {
+      "type": "tool_call",
+      "call_id": "c8",
+      "tool": "make_chart",
+      "inputs": {
+        "result_id": "R2",
+        "chart_type": "bar",
+        "title": "Share of loss-making order lines by Market"
+      }
+    },
+    {
+      "type": "tool_result",
+      "call_id": "c8",
+      "tool": "make_chart",
+      "result": {
+        "path": "outputs/share-of-loss-making-order-lines-by-market_20260927_145409_572671.html",
+        "chart_type": "bar",
+        "title": "Share of loss-making order lines by Market",
+        "description": "Saved a bar chart titled 'Share of loss-making order lines by Market' to share-of-loss-making-order-lines-by-market_20260927_145409_572671.html."
+      },
+      "is_error": false
+    },
+    {
+      "type": "chart",
+      "path": "outputs/share-of-loss-making-order-lines-by-market_20260927_145409_572671.html",
+      "title": "Share of loss-making order lines by Market",
+      "chart_type": "bar",
+      "result_id": "R2"
+    },
+    {
+      "type": "tool_call",
+      "call_id": "c9",
+      "tool": "make_chart",
+      "inputs": {
+        "result_id": "R5",
+        "chart_type": "line",
+        "title": "Share of loss-making order lines by quarter"
+      }
+    },
+    {
+      "type": "tool_result",
+      "call_id": "c9",
+      "tool": "make_chart",
+      "result": {
+        "path": "outputs/share-of-loss-making-order-lines-by-quarter_20260927_145410_373348.html",
+        "chart_type": "line",
+        "title": "Share of loss-making order lines by quarter",
+        "description": "Saved a line chart titled 'Share of loss-making order lines by quarter' to share-of-loss-making-order-lines-by-quarter_20260927_145410_373348.html."
+      },
+      "is_error": false
+    },
+    {
+      "type": "chart",
+      "path": "outputs/share-of-loss-making-order-lines-by-quarter_20260927_145410_373348.html",
+      "title": "Share of loss-making order lines by quarter",
+      "chart_type": "line",
+      "result_id": "R5"
+    },
+    {
+      "type": "note",
+      "text": "Writing the summary."
+    },
+    {
+      "type": "summary",
+      "text": "## Executive summary\n\n**Markets barely differ on the share of loss-making order lines: from 18.6% (LATAM) to 18.9% (Pacific Asia), so Market is not the lever.**\n\nBy total profit, Europe contributes the most ($1.17M, 29.5% of the total) and Africa the least ($252K, 6.3%).\n\nBy total sales, Europe contributes the most ($10.87M, 29.6% of the total) and Africa the least ($2.29M, 6.2%).\n\nNo other branch passes the rule either: no segment with enough volume is more than 5 pp worse than the baseline of 18.7%, so this is a company-wide issue rather than a problem in one pocket.\n\n**Key drivers**\n- None passed the rule; the share of loss-making order lines is spread evenly across the business.\n\n**Recommendations**\n1. **Set a price floor so no order line is sold below cost.** Impact: High, effort: Medium.\n2. **Run a product-level profitability review.** Impact: High, effort: Medium.\n3. **Track the loss-making share monthly by market and category.** Impact: Medium, effort: Low.\n\n## Question\n\nWhere are we losing money, and is it a market problem? Measured by the share of loss-making order lines: Share of order lines that lose money (profit below zero), 0 to 1.\n\n## Issue tree and findings\n\n| Branch | Hypothesis | Verdict | Evidence |\n|---|---|---|---|\n| Logistics: Shipping Mode | Shipping costs make some modes unprofitable. | Ruled out | Every reliable segment is within 5 pp of 18.7%; worst is Standard Class at 18.9% (+0.1 pp). |\n| Geography: Market | Some markets sell at a loss more often (pricing, discounts, costs). | Ruled out | Every reliable segment is within 5 pp of 18.7%; worst is Pacific Asia at 18.9% (+0.2 pp). |\n| Customer: Customer Segment | Some customer types get unprofitable deals. | Ruled out | Every reliable segment is within 5 pp of 18.7%; worst is Home Office at 18.9% (+0.1 pp). |\n| Product: Category | Some product categories are sold below cost. | Ruled out | Every reliable segment is within 5 pp of 18.7%; worst is Shop By Sport at 19.6% (+0.9 pp). |\n| Time: quarterly trend | Losses have grown recently. | Ruled out | Every reliable period is within 5 pp of 18.7%; worst is 2016Q1 at 19.4% (+0.7 pp). |\n\n## Impact\n\n- No segment-level driver to size.\n- By total profit, Europe contributes the most ($1.17M, 29.5% of the total) and Africa the least ($252K, 6.3%).\n- By total sales, Europe contributes the most ($10.87M, 29.6% of the total) and Africa the least ($2.29M, 6.2%).\n\n## Recommendations\n\n| # | Action | Why | Impact | Effort | First step |\n|---|---|---|---|---|---|\n| 1 | Set a price floor so no order line is sold below cost | No single segment explains the problem, so the fix has to be company-wide. | High | Medium | List the products and discount levels behind loss-making lines. |\n| 2 | Run a product-level profitability review | No single segment explains the problem, so the fix has to be company-wide. | High | Medium | Rank products by loss-making share and total profit. |\n| 3 | Track the loss-making share monthly by market and category | No single segment explains the problem, so the fix has to be company-wide. | Medium | Low | Automate this analysis as a monthly report. |\n\n## Method and caveats\n\n- Rule: a branch is a driver if its worst segment with at least 1,000 order lines is more than 5 pp worse than the baseline. Smaller segments are too noisy to act on.\n- Counts are order lines (a product within an order), not whole orders.\n- Periods with unusually low volume were left out of the trend test: 2017Q4, 2018Q1.\n- Produced by the scripted brain: fixed rules, no AI model. Every number comes from a tool result."
+    },
+    {
+      "type": "run_end",
+      "status": "complete",
+      "stats": {
+        "tool_calls": 9,
+        "charts": 2,
+        "seconds": 9.6,
+        "question_type": "profitability",
+        "drivers": 0,
+        "unsupported_numbers": []
+      }
+    }
+  ]
+}

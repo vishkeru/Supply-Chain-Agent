@@ -5,11 +5,19 @@ Every brain has a run(question) generator that yields events in the standard
 format (src/events.py), so the UI works the same whichever brain is used.
 
 BRAINS below is the registry the app reads. A brain appears in the app only
-if its available() check passes: the scripted brain always works; the others
+if its available() check passes. Every brain analyses the DataCo CSV, so none
+is available without it (the app then opens in replay mode). LLM brains also
 need their module to exist and their service to be reachable.
 """
 
 import importlib
+
+from src import tools
+
+
+def data_available():
+    """True if the DataCo CSV is in data/ (every brain's tools read it)."""
+    return tools.DATA_PATH.exists()
 
 
 def _scripted_run(question):
@@ -43,9 +51,11 @@ _claude_available, _claude_run = _module_brain("claude_brain")
 
 # Label shown in the app -> how to check it's usable, and how to run it
 BRAINS = {
-    "Scripted (no LLM)": {"available": lambda: True, "run": _scripted_run},
-    "Local LLM (Ollama)": {"available": _ollama_available, "run": _ollama_run},
-    "Claude API": {"available": _claude_available, "run": _claude_run},
+    "Scripted (no LLM)": {"available": data_available, "run": _scripted_run},
+    "Local LLM (Ollama)": {"available": lambda: data_available() and _ollama_available(),
+                           "run": _ollama_run},
+    "Claude API": {"available": lambda: data_available() and _claude_available(),
+                   "run": _claude_run},
 }
 
 

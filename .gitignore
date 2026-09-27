@@ -1,17 +1,25 @@
-# Only the agent code in src/ is tracked and published.
-# Everything else (notebooks, tests, CLAUDE.md, data, .env, venv, ...) stays on this computer.
+# Allow-list: only the files below are tracked and published.
+# Everything else (tests, notebooks, CLAUDE.md, data, outputs, .env, venv, ...) stays on this computer.
 /*
 !/.gitignore
+!/README.md
+!/app.py
+!/requirements.txt
 !/src/
+!/demo_runs/
+!/docs/
+# From .streamlit/ publish only the theme, never secrets.toml
+!/.streamlit/
+/.streamlit/*
+!/.streamlit/config.toml
 
-# Never publish secrets (already covered by /* above, listed to be explicit)
+# Never publish secrets or local files, even inside an allowed folder
 .env
-
-# Python cache inside src/
-__pycache__/
-*.pyc
-.env
+.streamlit/secrets.toml
 venv/
 .venv/
 data/*.csv
+
+# Python cache
 __pycache__/
+*.pyc

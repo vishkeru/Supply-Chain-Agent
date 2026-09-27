@@ -11,6 +11,7 @@ import json
 import re
 import time
 from datetime import datetime
+from pathlib import Path
 
 from src import tools
 
@@ -19,12 +20,29 @@ REPLAY_DELAY = 0.4    # seconds between events when replaying at 1x (2x and 4x d
 SAVED_FIELDS = ("question", "brain", "timestamp", "seconds", "events")
 
 
+def without_local_paths(value):
+    """
+    Saved runs are published on GitHub, so replace this computer's project
+    folder with a relative path, e.g.
+    'C:/Users/me/.../outputs/chart.html' -> 'outputs/chart.html'.
+    """
+    root = str(tools.PROJECT_ROOT)
+    if isinstance(value, str) and value.startswith(root):
+        return Path(value).relative_to(tools.PROJECT_ROOT).as_posix()
+    if isinstance(value, dict):
+        return {key: without_local_paths(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [without_local_paths(item) for item in value]
+    return value
+
+
 def save_run(run):
     """Save a finished run to demo_runs/ as JSON. Returns the file path."""
     DEMO_RUNS_DIR.mkdir(parents=True, exist_ok=True)
     slug = re.sub(r"[^a-z0-9]+", "-", run["question"].lower()).strip("-")[:40] or "run"
     path = DEMO_RUNS_DIR / f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{slug}.json"
-    path.write_text(json.dumps({k: run[k] for k in SAVED_FIELDS}, indent=2), encoding="utf-8")
+    saved = without_local_paths({k: run[k] for k in SAVED_FIELDS})
+    path.write_text(json.dumps(saved, indent=2), encoding="utf-8")
     return path
 
 

@@ -1,0 +1,11 @@
+# Clean, light, consulting-style theme for app.py
+[theme]
+base = "light"
+primaryColor = "#2a78d6"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f5f6f8"
+textColor = "#1b1b1a"
+font = "sans serif"
+
+[client]
+toolbarMode = "minimal"
